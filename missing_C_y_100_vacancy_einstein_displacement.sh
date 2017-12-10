@@ -23,11 +23,8 @@ list="-100 -95 -90 -85 -80 -75 -70 -65 -60 -55 -50 -45 -40 -35 -30 -25 -20 -15 -
 dir=`pwd`
 c=0
 elements="Zr C"
-#vols="4.575 4.600 4.625 4.65837 4.685 4.730 4.759 4.801 4.850"
-#vols="4.685"
-#vols="4.850"
-#vols="4.730 4.759 4.801"
-vols="4.575 4.600 4.625"
+vols="4.65837 4.685 4.730 4.759 4.801 4.850"
+#vols="4.575 4.600 4.625"
 
 #Define geometry parameters for x xy and xyz direction displacements
 scale1=$(echo 'scale=14;sqrt(1/1)' |bc -l)
@@ -55,20 +52,22 @@ for k in $vols; do
 echo "2) made setupfiles directory for volume" $k
 # Zr displacement options :  1=100 dx, 2=100 dy, 3=110 dxz, 4=110 dyz, 5=111 dxyz
 #for Carbon,mkdir directories for the displacement direction and defect-symmetry-broken inequivalent displacements direction subdirs    
-      mkdir Zr ; cd Zr 
-        mkdir 100 110 111
-          cd 100 ; mkdir x y ; cd ../
-          cd 110 ; mkdir xz yz ; cd ../
-          cd 111 ; mkdir xyz  ; cd ../
-      cd $dir/$k/SETUPfiles
+#      mkdir Zr ; cd Zr 
+#        mkdir 100 110 111
+#          cd 100 ; mkdir x y ; cd ../
+#          cd 110 ; mkdir xz yz ; cd ../
+#          cd 111 ; mkdir xyz  ; cd ../
+#      cd $dir/$k/SETUPfiles
 
 # C displacement options :  1=100 dx, 2=110 dxy, 3=110 dxz, 4=111 dxyz, 5=111 d-x+y+z ( bar on the x - necessarily after inorder to use mkdir in the directory name)
 #for Zirconium, mkdir directories for the displacement direction and defect-symmetry-broken inequivalent displacements direction subdirs    
-      mkdir C ; cd C 
-        mkdir 100 110 111
-          cd 100 ; mkdir x ; cd ../
-          cd 110 ; mkdir xy xz ; cd ../
-          cd 111 ; mkdir xyz ; mkdir  bxyz ; cd ../
+#      mkdir C ; 
+        cd C 
+#        mkdir 100 110 111
+          cd 100 ; mkdir y ; cd ../
+#          cd 100 ; mkdir x ; cd ../
+#          cd 110 ; mkdir xy xz ; cd ../
+#          cd 111 ; mkdir xyz ; mkdir  bxyz ; cd ../
       cd $dir/$k/SETUPfiles
 
 echo "3) direction and displacement subdirerctories made"
@@ -146,6 +145,7 @@ echo "7) defined new x y and z coords for displacement" $i
     zrlinenewdxyz=$(echo " " $zrXnew111 "" $zrYnew111 "" $zrZnew111) && echo $zrlinenewdxyz > zrlinenewdxyz
 #Make new C lines
     clinenewdx=$(echo " " $cXnew100 "" $cY "" $cZ) && echo $clinenewdx > clinenewdx
+    clinenewdy=$(echo " " $cX "" $cYnew100 "" $cZ) && echo $clinenewdy > clinenewdy
     clinenewdxy=$(echo " " $cXnew110 "" $cYnew110 "" $cZ) && echo $clinenewdxy > clinenewdxy
     clinenewdxz=$(echo " " $cXnew110 "" $cY "" $cZnew110) && echo $clinenewdxz > clinenewdxz
     clinenewdxyz=$(echo " " $cXnew111 "" $cYnew111 "" $cZnew111) && echo $clinenewdxyz > clinenewdxyz
@@ -163,6 +163,7 @@ echo "8) Have exported new coordinate lines for displacement" $i
 #Make the new POSCAR for Zr disp
 # C displacement options :  1=100 dx, 2=NA-, 3=110 dxy, 4=110 dxz, 5=111 dxyz, 6=111 d-x+y+z (bar before the x)
     cat head cmidSection clinenewdx     > $dir/$k/SETUPfiles/C/100/x/POSCAR.$i
+    cat head cmidSection clinenewdy     > $dir/$k/SETUPfiles/C/100/y/POSCAR.$i
     cat head cmidSection clinenewdxy    > $dir/$k/SETUPfiles/C/110/xy/POSCAR.$i
     cat head cmidSection clinenewdxz    > $dir/$k/SETUPfiles/C/110/xz/POSCAR.$i
     cat head cmidSection clinenewdxyz   > $dir/$k/SETUPfiles/C/111/xyz/POSCAR.$i
@@ -192,7 +193,7 @@ for k in $vols; do
   cd $dir/$k
     mkdir C ; cd C
       mkdir 100 110 111
-        cd 100 ; mkdir x ; cd ../
+        cd 100 ; mkdir x y ; cd ../
         cd 110 ; mkdir xy xz ; cd ../
         cd 111 ; mkdir xyz ; mkdir  bxyz ; cd ../
   cd $dir/$k
